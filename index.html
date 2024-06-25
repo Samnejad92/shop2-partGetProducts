@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>فروشگاه | خانه</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">فروشگاه آنلاین</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarResponsive"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html"
+                >خانه
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">تماس با ما</a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav">
+            <li class="nav-item mr-2">
+              <button
+                class="nav-item btn btn-outline-info"
+                data-toggle="modal"
+                data-target="#cartModal"
+              >
+                سبد خرید
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="cartModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">سبد خرید</h5>
+            <button
+              type="button"
+              class="close ml-0 mt-0 p-2"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="cart mb-5">
+              <div class="alert alert-success" id="successMessage">
+                پیام شما با موفقیت ارسال شد.
+              </div>
+              <div class="list-group" id="cart-list"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              بستن
+            </button>
+            <button type="button" class="btn btn-primary" id="buyItems">
+              خرید
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="container my-4">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="filter">
+            <h3 class="my-4">فیلتر محصولات</h3>
+            <div class="priceFilter">
+              <label for="priceRange"><h5>قیمت</h5></label>
+              <input
+                type="range"
+                class="custom-range"
+                min="0"
+                max="5"
+                step="0.5"
+                id="priceRange"
+              />
+            </div>
+            <div class="brandFilter">
+              <h5 class="mb-3">برند</h5>
+              <div class="my-1 d-flex align-items-center">
+                <input
+                  type="checkbox"
+                  value=""
+                  id="appleBrand"
+                  data-brand-name="اپل"
+                  class="brand-select ml-2"
+                />
+                <label for="appleBrand" class="my-0"> اپل </label>
+              </div>
+
+              <div class="my-1 d-flex align-items-center">
+                <input
+                  type="checkbox"
+                  value=""
+                  id="microsoftBrand"
+                  data-brand-name="مایکروسافت"
+                  class="brand-select ml-2"
+                />
+                <label for="microsoftBrand" class="my-0"> مایکروسافت </label>
+              </div>
+
+              <div class="my-1 d-flex align-items-center">
+                <input
+                  type="checkbox"
+                  value=""
+                  id="asusBrand"
+                  data-brand-name="ایسوس"
+                  class="brand-select ml-2"
+                />
+                <label for="asusBrand" class="my-0"> ایسوس </label>
+              </div>
+
+              <div class="my-1 d-flex align-items-center">
+                <input
+                  type="checkbox"
+                  value=""
+                  id="lenovoBrand"
+                  data-brand-name="لنوو"
+                  class="brand-select ml-2"
+                />
+                <label for="lenovoBrand" class="my-0"> لنوو </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <div class="row" id="product-list">
+            <div class="mx-auto mt-5">
+              <img src="images/supermarket.png">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-3 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">کپی رایت &copy; ۲۰۲۰</p>
+      </div>
+    </footer>
+
+    <script src="js/jquery-3.5.1.slim.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+    function renderProducts(products) {
+  const productList = document.getElementById('product-list');
+
+  const productsHTML = products
+    .map(
+      product =>
+        `<div class="product col-lg-4 col-md-6 mb-4">
+		<div class="card h-100">
+			<a href="#"
+				><img
+					class="card-img-top"
+					src="${product.image}"
+					alt="${product.title}"
+			/></a>
+			<div class="card-body">
+				<h4 class="card-title">
+				    ${product.title}
+				</h4>
+				<h5 class="product-price">${formatMoney(product.price)} تومان</h5>
+				<p class="card-text">
+				    ${product.description}
+				</p>
+			</div>
+			<div class="card-footer">
+				<button class="btn btn-light add-to-cart" data-product-id="${product.id}">
+					افزودن به سبد خرید
+				</button>
+			</div>
+		</div>
+	</div>`
+    )
+    .join('');
+
+  productList.innerHTML = productsHTML;
+}
+
+function formatMoney(amount, decimalCount = 0, decimal = '.', thousands = ',') {
+  try {
+    decimalCount = Math.abs(decimalCount);
+    decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+    const negativeSign = amount < 0 ? '-' : '';
+
+    let i = parseInt(
+      (amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))
+    ).toString();
+    let j = i.length > 3 ? i.length % 3 : 0;
+
+    return (
+      negativeSign +
+      (j ? i.substr(0, j) + thousands : '') +
+      i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thousands) +
+      (decimalCount
+        ? decimal +
+          Math.abs(amount - i)
+            .toFixed(decimalCount)
+            .slice(2)
+        : '')
+    );
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+let products = [];
+window
+  .fetch('http://localhost:3000/products')
+  .then(res => res.json())
+  .then(result => {
+    products = result;
+    renderProducts(products);
+  });
+
+function renderCart(cart) {
+  const cartList = document.getElementById('cart-list');
+
+  if (cart.length === 0) {
+    cartList.innerHTML = 'هیچ ایتمی در سبد خرید شما وجود ندارد.';
+    return;
+  }
+
+  const cartHTML = cart
+    .map(
+      item =>
+        `<div
+				class="list-group-item d-flex justify-content-between align-items-center cart-item"
+			>
+				<span>${item.title}</span>
+				<div>
+					<button class="btn inc-quantity" data-product-id="${item.id}">+</button><span>${item.quantity}</span
+					><button class="btn dec-quantity" data-product-id="${item.id}">-</button>
+				</div>
+			</div>`
+    )
+    .join('');
+
+  cartList.innerHTML = cartHTML;
+}
+
+function addToCart(productId, products, cart) {
+  const addedProduct = products.filter(product => product.id == productId)[0];
+
+  const productInCart = cart.find(item => item.id == productId);
+
+  if (productInCart) {
+    return cart.map(item =>
+      item.id == productId ? {...item, quantity: item.quantity + 1} : item
+    );
+  }
+
+  return [...cart, {...addedProduct, quantity: 1}];
+}
+
+function takeFromCart(productId, cart) {
+  const productInCart = cart.find(item => item.id == productId);
+
+  if (productInCart.quantity === 1) {
+    return cart.filter(item => item.id != productId);
+  } else {
+    return cart.map(item =>
+      item.id == productId ? {...item, quantity: item.quantity - 1} : item
+    );
+  }
+}
+
+function presistCart(cart) {
+  window.localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function rehydrateCart() {
+  if (window.localStorage.getItem('cart')) {
+    return JSON.parse(window.localStorage.getItem('cart'));
+  } else {
+    return [];
+  }
+}
+
+let cart = [];
+
+cart = rehydrateCart();
+
+renderCart(cart);
+
+document.addEventListener('click', function (e) {
+  if (e.target && e.target.classList.contains('add-to-cart')) {
+    const productId = e.target.getAttribute('data-product-id');
+    cart = addToCart(productId, products, cart);
+    renderCart(cart);
+    presistCart(cart);
+  } else if (e.target && e.target.classList.contains('inc-quantity')) {
+    const productId = e.target.getAttribute('data-product-id');
+    cart = addToCart(productId, products, cart);
+    renderCart(cart);
+    presistCart(cart);
+  } else if (e.target && e.target.classList.contains('dec-quantity')) {
+    const productId = e.target.getAttribute('data-product-id');
+    cart = takeFromCart(productId, cart);
+    renderCart(cart);
+    presistCart(cart);
+  }
+});
+
+let brandFilter = [];
+
+const brandCheckboxes = document.getElementsByClassName('brand-select');
+
+for (let i = 0; i < brandCheckboxes.length; i++) {
+  brandCheckboxes[i].addEventListener('change', e => {
+    const brandName = e.target.getAttribute('data-brand-name');
+
+    if (e.target.checked) {
+      brandFilter = [...brandFilter, brandName];
+
+      renderProducts(
+        products.filter(product => brandFilter.includes(product.brand))
+      );
+    } else {
+      brandFilter = brandFilter.filter(b => b !== brandName);
+
+      if (brandFilter.length === 0) {
+        renderProducts(products);
+      } else {
+        renderProducts(
+          products.filter(product => brandFilter.includes(product.brand))
+        );
+      }
+    }
+  });
+}
+    </script>
+  </body>
+</html>
